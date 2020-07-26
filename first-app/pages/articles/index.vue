@@ -1,6 +1,10 @@
 <template>
   <v-card>
-    <v-data-table :headers="headers" :items="articles"></v-data-table>
+    <v-data-table :headers="headers" :items="articles">
+      <template v-slot:item.url="{ item }">
+        <nuxt-link v-bind:to="'/article/' + item.id">詳細</nuxt-link>
+      </template>
+    </v-data-table>
   </v-card>
 </template>
 
@@ -9,7 +13,6 @@ export default {
   layout: 'default',
   data() {
     return {
-      search: '',
       headers: [
         {
           text: 'ID',
@@ -19,6 +22,7 @@ export default {
         },
         { text: 'Title', value: 'title' },
         { text: 'Description', value: 'description' },
+        { text: 'URL', value: 'url' },
       ],
       articles: [
         {
