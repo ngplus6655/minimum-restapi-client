@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-card
-      v-for="article in articles"
+      v-for="article in displayArticles"
       :key="article.id"
       class="mx-auto mb-4"
-      max-width="600"
+      max-width="700"
       outlined
     >
       <v-card-text class="text-left">
@@ -27,9 +27,11 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+
     <v-pagination
       v-model="page"
-      :length="articles.length / 5 + 1"
+      :length="length"
+      @input="pageChange"
     ></v-pagination>
   </div>
 </template>
@@ -40,54 +42,33 @@ export default {
   data() {
     return {
       page: 1,
-      displayLists: [],
-      pageSize: 10,
-      articles: [
-        {
-          id: 1,
-          title: 'Test Article1',
-          description: 'Testing Article1',
-        },
-        {
-          id: 2,
-          title: 'Test Article2',
-          description: 'Testing Article2',
-        },
-        {
-          id: 3,
-          title: 'Test Article3',
-          description: 'Testing Article3',
-        },
-        {
-          id: 4,
-          title: 'Test Article4',
-          description: 'Testing Article4',
-        },
-        {
-          id: 5,
-          title: 'Test Article5',
-          description: 'Testing Article5',
-        },
-        {
-          id: 6,
-          title: 'Test Article6',
-          description: 'Testing Article6',
-        },
-        {
-          id: 7,
-          title: 'Test Article7',
-          description: 'Testing Article7',
-        },
-        {
-          id: 8,
-          title: 'Test Article8',
-          description: 'Testing Article8',
-        },
-      ],
+      length: 0,
+      articles: [],
+      displayArticles: [],
+      pageSize: 20,
     }
   },
-  mounted: function(){
-    this.displayLists = this.articles.slice(0,this.pageSize);
-  }
+  mounted() {
+    this.articles = new Array(99).fill().map((v, i) => {
+      return {
+        id: i,
+        title: 'Title' + i,
+        description: 'DSECRIPTION OF ARICLE' + i,
+      }
+    })
+    this.length = Math.ceil(this.articles.length / this.pageSize)
+    this.displayArticles = this.articles.slice(
+      this.pageSize * (this.page - 1),
+      this.pageSize * this.page
+    )
+  },
+  methods: {
+    pageChange(pageNumber) {
+      this.displayArticles = this.articles.slice(
+        this.pageSize * (pageNumber - 1),
+        this.pageSize * pageNumber
+      )
+    },
+  },
 }
 </script>
