@@ -20,7 +20,7 @@
         <v-btn
           text
           color="deep-purple accent-4"
-          :to="'article/' + article.id"
+          :to="{ name: 'articles-id', params: { id: article.id } }"
           nuxt
         >
           詳細を表示
