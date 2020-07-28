@@ -1,11 +1,37 @@
 <template>
-  <v-card>
-    <v-data-table :headers="headers" :items="articles">
-      <template v-slot:item.url="{ item }">
-        <nuxt-link v-bind:to="'/article/' + item.id">詳細</nuxt-link>
-      </template>
-    </v-data-table>
-  </v-card>
+  <div>
+    <v-card
+      v-for="article in articles"
+      :key="article.id"
+      class="mx-auto mb-4"
+      max-width="600"
+      outlined
+    >
+      <v-card-text class="text-left">
+        <span class="text--primary"> ID: {{ article.id }} </span>
+        <div class="display-1 text--primary">
+          {{ article.title }}
+        </div>
+        <p class="text--primary">
+          {{ article.description }}
+        </p>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          text
+          color="deep-purple accent-4"
+          :to="'article/' + article.id"
+          nuxt
+        >
+          詳細を表示
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    <v-pagination
+      v-model="page"
+      :length="articles.length / 5 + 1"
+    ></v-pagination>
+  </div>
 </template>
 
 <script>
@@ -13,17 +39,9 @@ export default {
   layout: 'default',
   data() {
     return {
-      headers: [
-        {
-          text: 'ID',
-          align: 'start',
-          filterable: false,
-          value: 'id',
-        },
-        { text: 'Title', value: 'title' },
-        { text: 'Description', value: 'description' },
-        { text: 'URL', value: 'url' },
-      ],
+      page: 1,
+      displayLists: [],
+      pageSize: 10,
       articles: [
         {
           id: 1,
@@ -68,5 +86,8 @@ export default {
       ],
     }
   },
+  mounted: function(){
+    this.displayLists = this.articles.slice(0,this.pageSize);
+  }
 }
 </script>
