@@ -49,13 +49,7 @@ export default {
     }
   },
   mounted() {
-    this.articles = new Array(99).fill().map((v, i) => {
-      return {
-        id: i,
-        title: 'Title' + i,
-        description: 'DSECRIPTION OF ARICLE' + i,
-      }
-    })
+    this.articles = this.$store.getters['articles/articles']
     this.length = Math.ceil(this.articles.length / this.pageSize)
     this.displayArticles = this.articles.slice(
       this.pageSize * (this.page - 1),

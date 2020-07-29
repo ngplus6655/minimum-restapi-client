@@ -28,16 +28,17 @@ export default {
   layout: 'default',
   data() {
     return {
+      articles: [],
       article: {},
     }
   },
   mounted() {
-    this.article = {
-      id: 1,
-      title: 'Title1',
-      description: 'DSECRIPTION OF ARICLE1',
-      content: 'HELLO WORLD!!',
-    }
+    this.articles = this.$store.getters['articles/articles']
+    this.articles.forEach((v) => {
+      if (v.id === parseInt(this.$route.params.id)) {
+        this.article = v
+      }
+    })
   },
 }
 </script>
