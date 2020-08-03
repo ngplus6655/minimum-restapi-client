@@ -1,10 +1,10 @@
 <template>
-  <v-simple-table height="300px">
+  <v-simple-table height="300px" v-if="article.length !== 0">
     <template v-slot:default>
       <tbody>
         <tr>
           <th>ID</th>
-          <td>{{ article.id }}</td>
+          <td>{{ article.ID }}</td>
         </tr>
         <tr>
           <th>Title</th>
@@ -12,7 +12,7 @@
         </tr>
         <tr>
           <th>Description</th>
-          <td>{{ article.description }}</td>
+          <td>{{ article.desc }}</td>
         </tr>
         <tr>
           <th>Content</th>
@@ -21,24 +21,35 @@
       </tbody>
     </template>
   </v-simple-table>
+  <v-progress-circular indeterminate :size="50" v-else></v-progress-circular>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   layout: 'default',
   data() {
     return {
-      articles: [],
-      article: {},
+      article: [],
     }
   },
   mounted() {
-    this.articles = this.$store.getters['articles/articles']
-    this.articles.forEach((v) => {
-      if (v.id === parseInt(this.$route.params.id)) {
-        this.article = v
-      }
+    this.fetchArticle().then((a) => {
+      console.debug(a)
+      this.article = a
     })
+  },
+  methods: {
+    ...mapActions({
+      getArticle() {
+        this.$store.dispatch('articles/getArticle', this.$route.params.id)
+      },
+    }),
+    async fetchArticle() {
+      this.getArticle()
+      return await this.$store.getters['articles/article']
+    },
   },
 }
 </script>

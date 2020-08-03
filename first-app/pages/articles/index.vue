@@ -1,26 +1,26 @@
 <template>
-  <div>
+  <div v-if="displayArticles.length !== 0">
     <v-card
       v-for="article in displayArticles"
-      :key="article.id"
+      :key="article.ID"
       class="mx-auto mb-4"
       max-width="700"
       outlined
     >
       <v-card-text class="text-left">
-        <span class="text--primary"> ID: {{ article.id }} </span>
+        <span class="text--primary"> ID: {{ article.ID }} </span>
         <div class="display-1 text--primary">
           {{ article.title }}
         </div>
         <p class="text--primary">
-          {{ article.description }}
+          {{ article.desc }}
         </p>
       </v-card-text>
       <v-card-actions>
         <v-btn
           text
           color="deep-purple accent-4"
-          :to="{ name: 'articles-id', params: { id: article.id } }"
+          :to="{ name: 'articles-id', params: { id: article.ID } }"
           nuxt
         >
           詳細を表示
@@ -34,9 +34,12 @@
       @input="pageChange"
     ></v-pagination>
   </div>
+  <v-progress-circular indeterminate :size="50" v-else></v-progress-circular>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   layout: 'default',
   data() {
@@ -49,14 +52,25 @@ export default {
     }
   },
   mounted() {
-    this.articles = this.$store.getters['articles/articles']
-    this.length = Math.ceil(this.articles.length / this.pageSize)
-    this.displayArticles = this.articles.slice(
-      this.pageSize * (this.page - 1),
-      this.pageSize * this.page
-    )
+    this.fetchArticle().then((a) => {
+      a.forEach((v) => {
+        this.articles.push(v)
+      })
+      this.length = Math.ceil(this.articles.length / this.pageSize)
+      this.displayArticles = this.articles.slice(
+        this.pageSize * (this.page - 1),
+        this.pageSize * this.page
+      )
+    })
   },
   methods: {
+    ...mapActions({
+      getArticles: 'articles/getArticles',
+    }),
+    async fetchArticle() {
+      this.getArticles()
+      return await this.$store.getters['articles/articles']
+    },
     pageChange(pageNumber) {
       this.displayArticles = this.articles.slice(
         this.pageSize * (pageNumber - 1),

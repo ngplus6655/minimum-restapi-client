@@ -95,7 +95,7 @@ export default {
   build: {},
   watchers: {
     webpack: {
-        poll: true
-    }
-  }
+      poll: true,
+    },
+  },
 }

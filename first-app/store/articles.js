@@ -1,17 +1,27 @@
 export const state = () => ({
-  // articles: new Array(99).fill().map((v, i) => {
-  //   return {
-  //     id: i,
-  //     title: 'Title' + i,
-  //     description: 'DESCRIPTION OF ARICLE' + i,
-  //     content:
-  //       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-  //   }
-  // }),
   articles: [],
+  article: [],
 })
 
+export const actions = {
+  getArticles({ commit }) {
+    const res = this.$axios.$get('http://localhost:10000/articles')
+    commit('setArticles', res)
+  },
+  getArticle({ commit }, id) {
+    const res = this.$axios.$get('http://localhost:10000/articles/' + id)
+    commit('setArticle', res)
+  },
+}
+
 export const mutations = {
+  setArticles(state, data) {
+    state.articles = data
+  },
+  setArticle(state, data) {
+    state.article = data
+  },
+
   add(state, article) {
     state.articles.push({
       title: article.title,
@@ -24,5 +34,8 @@ export const mutations = {
 export const getters = {
   articles: (state) => {
     return state.articles
+  },
+  article: (state) => {
+    return state.article
   },
 }
