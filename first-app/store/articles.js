@@ -21,14 +21,6 @@ export const mutations = {
   setArticle(state, data) {
     state.article = data
   },
-
-  add(state, article) {
-    state.articles.push({
-      title: article.title,
-      description: article.description,
-      content: article.content,
-    })
-  },
 }
 
 export const getters = {

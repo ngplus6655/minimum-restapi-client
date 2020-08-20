@@ -1,5 +1,6 @@
 <template>
   <div v-if="displayArticles.length !== 0">
+    <div>Cookieの値</div>
     <v-card
       v-for="article in displayArticles"
       :key="article.ID"

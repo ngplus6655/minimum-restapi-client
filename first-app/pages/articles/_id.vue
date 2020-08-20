@@ -36,7 +36,6 @@ export default {
   },
   mounted() {
     this.fetchArticle().then((a) => {
-      console.debug(a)
       this.article = a
     })
   },

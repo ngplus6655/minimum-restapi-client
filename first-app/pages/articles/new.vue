@@ -1,6 +1,5 @@
 <template>
   <v-form ref="form" v-model="valid">
-    {{ $store.getters['articles/articles'] }}
     <v-text-field
       v-model="title"
       :counter="10"
@@ -62,12 +61,19 @@ export default {
     submit() {
       this.$refs.form.validate()
       if (this.valid) {
-        const newArticle = new FormData()
-        newArticle.title = this.title
-        newArticle.description = this.description
-        newArticle.content = this.content
-        this.$store.commit('articles/add', newArticle)
-        this.reset()
+        this.$axios
+          .post('http://localhost:10000/articles', {
+            title: this.title,
+            desc: this.description,
+            content: this.content,
+          })
+          .then(() => {
+            alert('「' + this.title + '」を登録しました。')
+            this.$router.push('/articles')
+          })
+          .catch(() => {
+            alert('新規article「' + this.title + '」は登録できませんでした。  ')
+          })
       }
     },
     reset() {
